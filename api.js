@@ -9,6 +9,21 @@ module.exports = function(wagner) {
 
   api.use(bodyparser.json());
 
+
+  // TODO
+  // handle token
+  //    GET
+  //    POST
+  // verify dns records
+  // reboot the linode instances
+  // estalish web socket connection and broadcast distributed workload to slaves
+  // aggregate the benchmark result real-time and stream it back to the view to
+  //    modify the svg elements
+  // 
+
+
+
+
   api.get('/token', wagner.invoke(function(Token) {
     return function(req, res) {
       var token = randtoken.generate(16);

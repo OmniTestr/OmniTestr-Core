@@ -9,12 +9,13 @@ var tokenSchema = {
   token: {
     type: String,
     required: true
-    // "404"
+    // "akdskjdilw21Lk"
   },
   used: {
     type: Boolean,
+    default: false,
     required: true
-    // 42
+    // true
   }
 };
 
