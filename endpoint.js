@@ -9,7 +9,7 @@ var status = require('status.js');
  *  statuses:     an array of statuses, encoding the type and the frequency
  */
 
-var schema = new mongoose.Schema({
+var endpointSchema = {
   uri: {
     type: String,
     required: true
@@ -17,6 +17,7 @@ var schema = new mongoose.Schema({
   },
   method: {
     type: String,
+    uppercase: true,
     required: true
     // 'GET'
   }
@@ -25,7 +26,7 @@ var schema = new mongoose.Schema({
     required: true
     // ['https://news.ycombinator.com', 'https://news.ycombinator.com/comments']
   }],
-  time: [{
+  frequency: [{
     type: Number,
     limit: 10000
     // [1,0,0,...,200, 250,340,200,...0]
@@ -34,6 +35,7 @@ var schema = new mongoose.Schema({
     type: status
     // [{'404', 350}, {'500'. 100}]
   }]
-});
+};
 
-module.exports = schema;
+module.exports = new mongoose.Schema(endpointSchema);
+module.exports.endpointSchema = endpointSchema;
