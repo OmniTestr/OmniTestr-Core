@@ -2,7 +2,6 @@ var bodyparser = require('body-parser');
 var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
-var dns = require('dns');
 var randtoken = require('rand-token');
 
 module.exports = function(wagner) {
@@ -25,9 +24,9 @@ module.exports = function(wagner) {
     }
   }));
 
-  api.post('/token/:id', wagner.invoke(function(Token) {
+  api.post('/token/:id/:host', wagner.invoke(function(Token) {
     return function(req, res) {
-      Token.update({token: req.params.id, used: false}, {$set: {used: true}}, function(error, doc) {
+      Token.findOne({token: req.params.id, used: false}, function(error, doc) {
         if (error) {
           return res.status(status.INTERNAL_SERVER_ERROR).
           json({error: 'unable to authenticate token'});
@@ -36,12 +35,22 @@ module.exports = function(wagner) {
           return res.
             status(status.NOT_FOUND).
             json({error: 'not found'});
+        } else {
+          doc.used = true;
+
+
+
+          doc.save(function(err) {
+            if (err) {
+              return res.status(status.INTERNAL_SERVER_ERROR).
+              json({error: 'unable to authenticate token'});
+            } else {
+              return res.status(status.OK).json({status:"success"});
+            }
+          });
         }
       });
 
-      // placeholder
-      return res.status(status.OK).
-      json({token: token});
     }
   }));
 
