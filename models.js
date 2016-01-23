@@ -14,10 +14,13 @@ module.exports = function(wagner) {
     mongoose.model('Endpoint', require('./endpoint'), 'endpoints');
   var Status =
     mongoose.model('Status', require('./status'));
+  var Token =
+    mongoose.model('Token', require('./token'), 'tokens');
 
   var models = {
     Endpoint: Endpoint,
-    Status: Status
+    Status: Status,
+    Token: Token
   };
 
   // register factories
