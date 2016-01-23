@@ -3,6 +3,7 @@ var status = require('status.js');
 /* Fields that must be in the schema:
  *  uri:          a string representing the URI of the API endpoint, such as "v1/:userid/create".
  *                Required.
+ *  content:      a string representing the content-type, such as "text/javascript".
  *  method:       a string representing the HTTP method, such as "GET". Required.
  *  sources:      an array of uris, identifying the originating URIs. Required.
  *  time:         an array of integers, representing the frequency of the response time in bins. Required.
@@ -15,6 +16,11 @@ var endpointSchema = {
     required: true
     // 'v1/:userid/create'
   },
+  content: {
+    type: String,
+    required: true
+    // "text/css"
+  }
   method: {
     type: String,
     uppercase: true,
