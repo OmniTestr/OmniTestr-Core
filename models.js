@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 
 module.exports = function(wagner) {
+  // use test database
   mongoose.connect('mongodb://localhost:27017/test');
 
   wagner.factory('db', function() {
@@ -15,7 +16,8 @@ module.exports = function(wagner) {
     mongoose.model('Status', require('./status'));
 
   var models = {
-    Endpoint: Endpoint
+    Endpoint: Endpoint,
+    Status: Status
   };
 
   // register factories

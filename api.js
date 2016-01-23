@@ -8,5 +8,13 @@ module.exports = function(wagner) {
 
   api.use(bodyparser.json());
 
+  api.post('/endpoints', wagner.invoke(function(Endpoint) {
+    return function(req, res) {
+      // placeholder
+      return res.status(status.INTERNAL_SERVER_ERROR).
+      json({error: 'this is a test'});
+    }
+  }));
+
   return api;
 };
