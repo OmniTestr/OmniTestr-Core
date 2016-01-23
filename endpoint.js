@@ -8,27 +8,31 @@ var status = require('status.js');
  *  time:         an array of integers, representing the frequency of the response time in bins. Required.
  *  statuses:     an array of statuses, encoding the type and the frequency
  */
- 
+
 var schema = new mongoose.Schema({
   uri: {
     type: String,
     required: true
+    // 'v1/:userid/create'
   },
   method: {
     type: String,
     required: true
+    // 'GET'
   }
-  sources: {
-    type: [String],
+  sources: [{
+    type: String,
     required: true
-  },
+    // ['https://news.ycombinator.com', 'https://news.ycombinator.com/comments']
+  }],
   time: [{
     type: Number,
-    required: true,
     limit: 10000
+    // [1,0,0,...,200, 250,340,200,...0]
   }],
   statuses: [{
     type: status
+    // [{'404', 350}, {'500'. 100}]
   }]
 });
 
