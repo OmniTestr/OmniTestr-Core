@@ -18,8 +18,6 @@ gulp.task('test', function() {
     });
 });
 
-var files = ['./api.js', './endpoint.js', './index.js', './models.js'];
-
 gulp.task('watch', function() {
-  gulp.watch(files, ['test']);
+  gulp.watch(['./*.js'], ['test']);
 });
