@@ -1,3 +1,6 @@
-extend layout
+extends layout
 
-h1 This is a token #{token}
+block content
+	h1 Please login to load test your website.
+	a(href="/auth/facebook")
+		img(src="img/facebook.png")

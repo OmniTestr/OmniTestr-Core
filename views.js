@@ -17,9 +17,11 @@ module.exports = function(wagner) {
 
       Token.create({token: token, used: false}, function(error, doc) {
         if (error) {
+          console.log("error");
           return res.status(status.INTERNAL_SERVER_ERROR).
           json({error: 'unable to generate token'});
         } else {
+          console.log(token);
           return res.render('main.jade', {token: token});
         }
       });
