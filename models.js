@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 var _ = require('underscore');
-var WebSocketServer = require('ws').Server
-, wss = new WebSocketServer({ port: 4080 });
 
 
 module.exports = function(wagner) {
@@ -12,9 +10,9 @@ module.exports = function(wagner) {
     return mongoose;
   });
 
-  wagner.factory('wss', function() {
-    return wss;
-  });
+  // wagner.factory('wss', function() {
+  //   return wss;
+  // });
 
   // Endpoints are stored in the endpoints collection
   var Endpoint =

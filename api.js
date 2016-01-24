@@ -4,10 +4,21 @@ var status = require('http-status');
 var _ = require('underscore');
 var randtoken = require('rand-token');
 var dns = require('dns');
-var sys = require('sys');
 var exec = require('child_process').exec;
-var child;
 var fs = require('fs');
+
+
+var scrapper = function(config) {
+  var filePath = './config/' + config.url + '.json'
+  fs.appendFile(filePath, config, 'utf8', function() {
+    var cmd = 'node link_follower.js configs/' + filePath;
+    exec(cmd, function(error, stdout, stderr) {
+      if (error) {
+        console.log('error executing the scrapper');
+      }
+    });
+  });
+} 
 
 
 module.exports = function(wagner) {
@@ -65,6 +76,10 @@ module.exports = function(wagner) {
 
       dns.resolveCname(cnameRecord, function(err, addresses) {
 
+        if (err) {
+          console.log(err);
+        }
+
         if (addresses) {
           var rawVal = addresses[0].split('.')[0];
           console.log(rawVal)
@@ -89,15 +104,13 @@ module.exports = function(wagner) {
 
               //res.end(JSON.stringify({redirect: '/'}));
 
+              console.log("yay!");
 
-              wagner.invoke(function(User) {
-                
-              });
+              var config = {
+                "url" : req.body.userDomain
+              }
 
-              // setup benchmark feature ready to go
-
-
-
+              scrapper(config);
 
 
             } else {

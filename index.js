@@ -1,6 +1,7 @@
 var express = require('express');
 var wagner = require('wagner-core');
 var path = require('path');
+var ws = require('ws');
 
 require('./models')(wagner);
 
