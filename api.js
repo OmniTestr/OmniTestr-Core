@@ -48,14 +48,15 @@ module.exports = function(wagner) {
       console.log("testing the URI: " + cnameRecord);
 
       dns.resolveCname(cnameRecord, function(err, addresses) {
-        if (addresses) {
+        if (!err && addresses) {
           var rawVal = addresses[0].split('.')[0];
 
           Token.findOne({token: rawVal, used: false}, function(error, doc) {
             if (error) {
-              return res.status(status.NOT_FOUND);
-              done();
-            } else {
+              return res.redirect('/dashboard', {status: "error: invalid token"});
+            } 
+
+            if (doc) {
               console.log("found it");
               console.log(doc);
 
@@ -78,8 +79,8 @@ module.exports = function(wagner) {
            
           });
         } else {
-          return res.status(status.NOT_FOUND);
-          done();
+          res.status(status.NOT_FOUND).
+          json({error: 'this is a test'});
           // redirect to the original
         }
   
@@ -89,28 +90,6 @@ module.exports = function(wagner) {
       );
 
 
-
-      // Token.findOne({token: req.params.id, used: false}, function(error, doc) {
-      //   if (error) {
-      //     return res.status(status.INTERNAL_SERVER_ERROR).
-      //     json({error: 'unable to authenticate token'});
-      //   }
-      //   if (!doc) {
-      //     return res.
-      //       status(status.NOT_FOUND).
-      //       json({error: 'not found'});
-      //   } else {
-      //     doc.used = true;
-
-      //     doc.save(function(err) {
-      //       if (err) {
-      //         
-      //       } else {
-      //         return res.status(status.OK).json({status:"success"});
-      //       }
-      //     });
-      //   }
-      // });
       return res.status(status.OK).
       json({error: 'this is a test'});
 

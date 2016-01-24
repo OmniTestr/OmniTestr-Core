@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	h1 You're currently authorized to test #{domain}.
+	h1 #{status}.
 	br
 	h2 Token: #{token}
 	h3 1. Please add a CNAME record on your DNS for omnitestr and point it to #{token}.io
