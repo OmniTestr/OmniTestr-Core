@@ -17,6 +17,15 @@
             "http://seanbae.com"
         ]
     },
+    "http://seanbae.com/stylesheets/animate.css": {
+        "content_type": "text/css; charset=UTF-8",
+        "protocol": "http:",
+        "query": {},
+        "hash": "",
+        "GET": [
+            "http://seanbae.com"
+        ]
+    },
     "http://seanbae.com/stylesheets/style.css": {
         "content_type": "text/css; charset=UTF-8",
         "protocol": "http:",
@@ -35,17 +44,17 @@
             "http://seanbae.com"
         ]
     },
-    "http://seanbae.com/stylesheets/animate.css": {
-        "content_type": "text/css; charset=UTF-8",
-        "protocol": "http:",
+    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js": {
+        "content_type": "application/javascript",
+        "protocol": "https:",
         "query": {},
         "hash": "",
         "GET": [
             "http://seanbae.com"
         ]
     },
-    "https://code.jquery.com/jquery-2.1.4.min.js": {
-        "content_type": "application/javascript; charset=utf-8",
+    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css": {
+        "content_type": "text/css",
         "protocol": "https:",
         "query": {},
         "hash": "",
@@ -62,17 +71,8 @@
             "http://seanbae.com"
         ]
     },
-    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js": {
-        "content_type": "application/javascript",
-        "protocol": "https:",
-        "query": {},
-        "hash": "",
-        "GET": [
-            "http://seanbae.com"
-        ]
-    },
-    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css": {
-        "content_type": "text/css",
+    "https://code.jquery.com/jquery-2.1.4.min.js": {
+        "content_type": "application/javascript; charset=utf-8",
         "protocol": "https:",
         "query": {},
         "hash": "",

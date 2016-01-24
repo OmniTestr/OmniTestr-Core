@@ -6,13 +6,13 @@ var randtoken = require('rand-token');
 var dns = require('dns');
 var exec = require('child_process').exec;
 var fs = require('fs');
+var socket = require('./index');
 
 
 var scrapper = function(domain) {
   var config = {
       "url" : "http://" + domain
     }
-
 
   var content = JSON.stringify(config);
 
@@ -74,14 +74,24 @@ module.exports = function(wagner) {
   // api.post('/loadtest')
 
 
-  api.get('/vis/:id', wagner.invoke(function(Endpoint) {
+  api.get('/vis/:id', function(Socket) {
+
     return function(req, res) {
-      console.log("YAY");
+      var load = 10;
+      var filePath = 'outputs/' + req.params.id + '.json';
+
+      fs.readFile(filePath, function(err, data) {
+        var parsedData = JSON.parse(data);
+        parsedData['load'] = load;
+        socket.broadcast(parsedData);
+      });
+
+      // combine json in outputs folder and the load
 
       return res.status(status.OK).
           json({error: 'yay test success'});
     }
-  }));
+  });
 
 
   api.post('/dns', wagner.invoke(function(Token) {

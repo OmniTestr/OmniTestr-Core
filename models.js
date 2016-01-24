@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var _ = require('underscore');
+var socket = require('./index');
 
 
 module.exports = function(wagner) {
@@ -8,6 +9,10 @@ module.exports = function(wagner) {
 
   wagner.factory('db', function() {
     return mongoose;
+  });
+
+  wagner.factory('Socket', function() {
+    return socket;
   });
 
   // wagner.factory('wss', function() {
