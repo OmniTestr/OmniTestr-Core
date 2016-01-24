@@ -1,3 +1,10 @@
+var bodyparser = require('body-parser');
+var express = require('express');
+var status = require('http-status');
+var _ = require('underscore');
+var wagner = require('wagner-core');
+var randtoken = require('rand-token');
+
 function setupAuth(User, app) {
   var passport = require('passport');
   var FacebookStrategy = require('passport-facebook').Strategy;
@@ -18,7 +25,8 @@ function setupAuth(User, app) {
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/auth/facebook/callback',
+      // callbackURL: 'http://localhost:3000/auth/facebook/callback',
+      callbackURL: 'http://localhost:3000/dashboard',
       // Necessary for new version of Facebook graph API
       profileFields: ['id', 'emails', 'name']
     },
@@ -53,11 +61,44 @@ function setupAuth(User, app) {
   app.get('/auth/facebook',
     passport.authenticate('facebook', { scope: ['email'] }));
 
-  app.get('/auth/facebook/callback',
+  app.get('/dashboard',
     passport.authenticate('facebook', { failureRedirect: '/fail' }),
-    function(req, res) {
-      res.send('Welcome, ' + req.user.profile.username);
-    });
+    
+
+
+
+      wagner.invoke(
+        function(Token) { 
+          return function(req, res) {
+      
+            var token = randtoken.generate(16);
+
+            Token.create({token: token, used: false}, function(error, doc) {
+              if (error) {
+                console.log("error");
+                return res.status(status.INTERNAL_SERVER_ERROR).
+                json({error: 'unable to generate token'});
+              } else {
+                console.log(token);
+                res.render('visualization.jade', {token: token});
+              }
+            });
+
+          }
+        }
+      )
+
+
+
+       // res.send('Welcome, ' + req.user.profile.username);
+
+
+  
+
+
+      
+      // res.send('Welcome, ' + req.user.profile.username);
+  );
 }
 
 module.exports = setupAuth;

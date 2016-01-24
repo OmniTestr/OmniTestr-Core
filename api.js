@@ -21,9 +21,6 @@ module.exports = function(wagner) {
   //    modify the svg elements
   // 
 
-
-
-
   api.get('/token', wagner.invoke(function(Token) {
     return function(req, res) {
       var token = randtoken.generate(16);

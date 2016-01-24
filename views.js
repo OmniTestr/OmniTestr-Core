@@ -4,7 +4,6 @@ var status = require('http-status');
 var _ = require('underscore');
 var randtoken = require('rand-token');
 
-
 module.exports = function(wagner) {
   var api = express.Router();
 
@@ -22,13 +21,21 @@ module.exports = function(wagner) {
           json({error: 'unable to generate token'});
         } else {
           console.log(token);
-          return res.render('main.jade', {token: token});
+          return res.render('main.jade', {});
         }
       });
 
     }
   }));
 
+
+
+
+  // api.get('/dashboard', );
+      
+        
+        
+         
 
   return api;
 };
