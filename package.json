@@ -7,7 +7,6 @@
     "body-parser": "1.12.4",
     "express": "4.12.3",
     "express-session": "1.11.2",
-    "fs": "0.0.2",
     "http-status": "0.1.8",
     "jade": "^1.11.0",
     "mongoose": "4.0.3",
@@ -19,7 +18,16 @@
     "sys": "0.0.1",
     "underscore": "1.5.2",
     "wagner-core": "0.1.0",
-    "ws": "^1.0.1"
+    "ws": "^1.0.1",
+    "cheerio": "^0.19.0",
+    "escape-string-regexp": "^1.0.4",
+    "linkscrape": "^1.0.0",
+    "parse-domain": "^0.2.0",
+    "phantom": "^0.8.4",
+    "regex": "^0.1.1",
+    "request": "^2.67.0",
+    "url-parse": "^1.0.5",
+    "zombie": "^4.2.1"
   },
   "devDependencies": {
     "gulp": "~3.8.11",

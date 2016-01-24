@@ -8,14 +8,24 @@ var exec = require('child_process').exec;
 var fs = require('fs');
 
 
-var scrapper = function(config) {
-  var filePath = './config/' + config.url + '.json'
-  fs.appendFile(filePath, config, 'utf8', function() {
-    var cmd = 'node link_follower.js configs/' + filePath;
+var scrapper = function(domain) {
+  var config = {
+      "url" : "http://" + domain
+    }
+
+
+  var content = JSON.stringify(config);
+
+
+  var filePath = 'configs/'+ domain + '.json'
+  console.log(filePath);
+  fs.writeFile(filePath, content, function() {
+    var cmd = 'node link_follower.js ' + filePath;
     exec(cmd, function(error, stdout, stderr) {
       if (error) {
-        console.log('error executing the scrapper');
+        console.log(error);
       }
+      console.log("done!");
     });
   });
 } 
@@ -64,6 +74,16 @@ module.exports = function(wagner) {
   // api.post('/loadtest')
 
 
+  api.get('/vis/:id', wagner.invoke(function(Endpoint) {
+    return function(req, res) {
+      console.log("YAY");
+
+      return res.status(status.OK).
+          json({error: 'yay test success'});
+    }
+  }));
+
+
   api.post('/dns', wagner.invoke(function(Token) {
     return function(req, res) {
       // grab the url,
@@ -74,63 +94,71 @@ module.exports = function(wagner) {
       var cnameRecord = 'omnitestr.' + req.body.userDomain;
       console.log("testing the URI: " + cnameRecord);
 
-      dns.resolveCname(cnameRecord, function(err, addresses) {
+      // dns.resolveCname(cnameRecord, function(err, addresses) {
 
-        if (err) {
-          console.log(err);
-        }
+      //   if (err) {
+      //     console.log(err);
+      //   }
 
-        if (addresses) {
-          var rawVal = addresses[0].split('.')[0];
-          console.log(rawVal)
+      //   if (addresses) {
+      //     var rawVal = addresses[0].split('.')[0];
+      //     console.log(rawVal)
 
-          Token.findOne({token: rawVal, used: false}, function(error, doc) {
-            if (error) {
-              res.end(JSON.stringify({redirect: '/'}));
-            } 
+      //     Token.findOne({token: rawVal, used: false}, function(error, doc) {
+      //       if (error) {
+      //         res.end(JSON.stringify({redirect: '/'}));
+      //       } 
 
-            if (doc) {
-              console.log("found it");
-              console.log(doc);
+      //       if (doc) {
+      //         console.log("found it");
+      //         console.log(doc);
 
-              doc.used = true;
+      //         doc.used = true;
 
-              doc.save(function(err) {
-                if (err) {
-                  return res.status(status.INTERNAL_SERVER_ERROR).
-                  json({error: 'unable to authenticate token'});
-                }
-              });
+      //         doc.save(function(err) {
+      //           if (err) {
+      //             return res.status(status.INTERNAL_SERVER_ERROR).
+      //             json({error: 'unable to authenticate token'});
+      //           }
+      //         });
 
-              //res.end(JSON.stringify({redirect: '/'}));
+      //         //res.end(JSON.stringify({redirect: '/'}));
 
-              console.log("yay!");
+      //         console.log("yay!");
 
-              var config = {
-                "url" : req.body.userDomain
-              }
+      //         var config = {
+      //           "url" : req.body.userDomain
+      //         }
 
-              scrapper(config);
+      //         scrapper(config);
 
 
-            } else {
-              console.log("didn't find it");
-            }
+      //       } else {
+      //         console.log("didn't find it");
+      //       }
             
            
-          });
-        } else {
-          res.end(JSON.stringify({redirect: '/'}));
-          // res.status(status.NOT_FOUND).
-          // json({error: 'this is a test'});
-          // redirect to the original
-        }
+      //     });
+      //   } else {
+      //     res.end(JSON.stringify({redirect: '/'}));
+      //     // res.status(status.NOT_FOUND).
+      //     // json({error: 'this is a test'});
+      //     // redirect to the original
+      //   }
   
+      // }
+      var config = {
+        "url" : "http://" + req.body.userDomain
       }
+
+      console.log(config);
+      scrapper(req.body.userDomain);
+
+      var id = '/api/v1/vis/' + req.body.userDomain;
         
 
-      );
-      res.end(JSON.stringify({redirect: '/'}));
+      // );
+      res.end(JSON.stringify({redirect: id }));
 
       // return res.status(status.OK).
       // json({error: 'this is a test'});
