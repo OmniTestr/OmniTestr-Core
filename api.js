@@ -4,6 +4,11 @@ var status = require('http-status');
 var _ = require('underscore');
 var randtoken = require('rand-token');
 var dns = require('dns');
+var sys = require('sys');
+var exec = require('child_process').exec;
+var child;
+var fs = require('fs');
+
 
 module.exports = function(wagner) {
   var api = express.Router();
@@ -37,6 +42,17 @@ module.exports = function(wagner) {
     }
   }));
 
+  /*
+    private api call should allow traversal of a given root based on a config file
+
+    TODO
+    - generate a config file
+    - run scrapper via a system command
+    - grab the result and pass
+  */
+  // api.post('/loadtest')
+
+
   api.post('/dns', wagner.invoke(function(Token) {
     return function(req, res) {
       // grab the url,
@@ -48,12 +64,14 @@ module.exports = function(wagner) {
       console.log("testing the URI: " + cnameRecord);
 
       dns.resolveCname(cnameRecord, function(err, addresses) {
-        if (!err && addresses) {
+
+        if (addresses) {
           var rawVal = addresses[0].split('.')[0];
+          console.log(rawVal)
 
           Token.findOne({token: rawVal, used: false}, function(error, doc) {
             if (error) {
-              return res.redirect('/dashboard', {status: "error: invalid token"});
+              res.end(JSON.stringify({redirect: '/'}));
             } 
 
             if (doc) {
@@ -69,18 +87,29 @@ module.exports = function(wagner) {
                 }
               });
 
-               // setup benchmark feature ready to go
+              //res.end(JSON.stringify({redirect: '/'}));
 
+
+              wagner.invoke(function(User) {
+                
+              });
+
+              // setup benchmark feature ready to go
+
+
+
+
+
+            } else {
+              console.log("didn't find it");
             }
             
-
-
-
            
           });
         } else {
-          res.status(status.NOT_FOUND).
-          json({error: 'this is a test'});
+          res.end(JSON.stringify({redirect: '/'}));
+          // res.status(status.NOT_FOUND).
+          // json({error: 'this is a test'});
           // redirect to the original
         }
   
@@ -88,10 +117,10 @@ module.exports = function(wagner) {
         
 
       );
+      res.end(JSON.stringify({redirect: '/'}));
 
-
-      return res.status(status.OK).
-      json({error: 'this is a test'});
+      // return res.status(status.OK).
+      // json({error: 'this is a test'});
 
     }
   }));

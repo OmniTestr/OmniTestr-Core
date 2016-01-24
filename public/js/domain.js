@@ -13,16 +13,13 @@ $(function() {
             url: '/api/v1/dns',
             success: function(response, textStatus, jqXHR) {
                 // if (err) console.log(err);
-                console.log("yay");
                 if (response.redirect) {
                     // response.redirect contains the string URL to redirect to
                     window.location.href = response.redirect;
                 }
             }
-		})
+		});
 	});
-
-
 
   $(window).keydown(function(event){
     if(event.keyCode == 13) {
