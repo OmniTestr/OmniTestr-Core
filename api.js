@@ -3,12 +3,13 @@ var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
 var randtoken = require('rand-token');
+var dns = require('dns');
 
 module.exports = function(wagner) {
   var api = express.Router();
 
   api.use(bodyparser.json());
-
+  api.use(bodyparser.urlencoded({ extended: true }));
 
   // TODO
   // handle token
@@ -36,32 +37,82 @@ module.exports = function(wagner) {
     }
   }));
 
-  api.post('/token/:id/:host', wagner.invoke(function(Token) {
+  api.post('/dns', wagner.invoke(function(Token) {
     return function(req, res) {
-      Token.findOne({token: req.params.id, used: false}, function(error, doc) {
-        if (error) {
-          return res.status(status.INTERNAL_SERVER_ERROR).
-          json({error: 'unable to authenticate token'});
-        }
-        if (!doc) {
-          return res.
-            status(status.NOT_FOUND).
-            json({error: 'not found'});
-        } else {
-          doc.used = true;
+      // grab the url,
+      // resolve the dns
+      // check if the token is unused
+      // if unused, accept, else reject
 
+      var cnameRecord = 'omnitestr.' + req.body.userDomain;
+      console.log("testing the URI: " + cnameRecord);
 
+      dns.resolveCname(cnameRecord, function(err, addresses) {
+        if (addresses) {
+          var rawVal = addresses[0].split('.')[0];
 
-          doc.save(function(err) {
-            if (err) {
-              return res.status(status.INTERNAL_SERVER_ERROR).
-              json({error: 'unable to authenticate token'});
+          Token.findOne({token: rawVal, used: false}, function(error, doc) {
+            if (error) {
+              return res.status(status.NOT_FOUND);
+              done();
             } else {
-              return res.status(status.OK).json({status:"success"});
+              console.log("found it");
+              console.log(doc);
+
+              doc.used = true;
+
+              doc.save(function(err) {
+                if (err) {
+                  return res.status(status.INTERNAL_SERVER_ERROR).
+                  json({error: 'unable to authenticate token'});
+                }
+              });
+
+               // setup benchmark feature ready to go
+
             }
+            
+
+
+
+           
           });
+        } else {
+          return res.status(status.NOT_FOUND);
+          done();
+          // redirect to the original
         }
-      });
+  
+      }
+        
+
+      );
+
+
+
+      // Token.findOne({token: req.params.id, used: false}, function(error, doc) {
+      //   if (error) {
+      //     return res.status(status.INTERNAL_SERVER_ERROR).
+      //     json({error: 'unable to authenticate token'});
+      //   }
+      //   if (!doc) {
+      //     return res.
+      //       status(status.NOT_FOUND).
+      //       json({error: 'not found'});
+      //   } else {
+      //     doc.used = true;
+
+      //     doc.save(function(err) {
+      //       if (err) {
+      //         
+      //       } else {
+      //         return res.status(status.OK).json({status:"success"});
+      //       }
+      //     });
+      //   }
+      // });
+      return res.status(status.OK).
+      json({error: 'this is a test'});
 
     }
   }));

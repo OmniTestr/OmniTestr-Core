@@ -9,24 +9,9 @@ module.exports = function(wagner) {
 
   api.use(bodyparser.json());
 
-  api.get('/', wagner.invoke(function(Token) {
-
-    return function(req, res) {
-      var token = randtoken.generate(16);
-
-      Token.create({token: token, used: false}, function(error, doc) {
-        if (error) {
-          console.log("error");
-          return res.status(status.INTERNAL_SERVER_ERROR).
-          json({error: 'unable to generate token'});
-        } else {
-          console.log(token);
-          return res.render('main.jade', {});
-        }
-      });
-
-    }
-  }));
+  api.get('/', function(req, res) {
+      res.render('main.jade', {});
+  });
 
 
 

@@ -63,16 +63,11 @@ function setupAuth(User, app) {
 
   app.get('/dashboard',
     passport.authenticate('facebook', { failureRedirect: '/fail' }),
-    
-
-
 
       wagner.invoke(
         function(Token) { 
           return function(req, res) {
-      
-            var token = randtoken.generate(16);
-
+            var token = randtoken.generate(16).toLowerCase();
             Token.create({token: token, used: false}, function(error, doc) {
               if (error) {
                 console.log("error");
@@ -87,18 +82,8 @@ function setupAuth(User, app) {
           }
         }
       )
-
-
-
-       // res.send('Welcome, ' + req.user.profile.username);
-
-
-  
-
-
-      
-      // res.send('Welcome, ' + req.user.profile.username);
   );
+
 }
 
 module.exports = setupAuth;
